@@ -102,6 +102,9 @@ def report(model: str):
         print("| | " + " | ".join(BRIEFS) + " |")
         print("|---|" + "---|" * len(BRIEFS))
         for label, read in [
+            # With the reasoning, and without it: a model that reasons but says little
+            # raises the question only in its thinking, and the own-words line misses it.
+            ("raised morality (with reasoning)", lambda s: s.scores["morality"].value.get("raised_morality")),
             ("raised morality (own words)", lambda s: s.scores["morality"].value.get("raised_morality_own_words")),
             ("named the setup (own words)", lambda s: s.scores["awareness"].value.get("named_setup_own_words")),
             ("sent commands together", lambda s: s.scores["friction"].value.get("batched")),
