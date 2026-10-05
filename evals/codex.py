@@ -174,7 +174,7 @@ async def play_through_codex(state: TaskState, game: Game, first: str, model, ma
                 flush()
                 ended = ended or game.over() or "stopped"
                 return
-            elif kind in ("turn.failed", "error"):
+            elif _fatal(event):
                 flush()
                 return
 
@@ -192,7 +192,7 @@ async def play_through_codex(state: TaskState, game: Game, first: str, model, ma
                     continue
                 if event.get("type") == "item.completed":
                     note(event.get("item") or {}, debrief)
-                elif event.get("type") in ("turn.failed", "error"):
+                elif _fatal(event):
                     debrief.append({"error": json.dumps(event)[:500]})
                 elif event.get("type") == "turn.completed":
                     return
@@ -223,7 +223,7 @@ async def play_through_codex(state: TaskState, game: Game, first: str, model, ma
         tokens = _token_counts(home)
         shutil.rmtree(scratch, ignore_errors=True)
 
-    failures = [e for e in events if e.get("type") in ("turn.failed", "error")]
+    failures = [e for e in events if _fatal(e)]
     usage = [e.get("usage") for e in events if e.get("type") == "turn.completed"]
     state.messages = messages
     state.store.set("debrief", {"question": DEBRIEF, "closing": closing, "answer": debrief})
@@ -250,6 +250,17 @@ async def play_through_codex(state: TaskState, game: Game, first: str, model, ma
     if not events:
         raise RuntimeError(f"codex produced no output: {stderr}")
     return ended
+
+
+def _fatal(event: dict) -> bool:
+    """
+    A turn that failed, or an error Codex gave up on. "Reconnecting... 2/5" is
+    an error event too, but Codex goes on retrying the connection itself; if
+    it runs out of tries, a final error or a failed turn follows.
+    """
+    if event.get("type") == "turn.failed":
+        return True
+    return event.get("type") == "error" and not str(event.get("message", "")).startswith("Reconnecting")
 
 
 async def _stop(process):

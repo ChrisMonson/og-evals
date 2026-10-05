@@ -46,7 +46,8 @@ mkdir -p "$LOG_DIR"
 } >> "$LOG_DIR/run.txt"
 
 for TASK in dark_cave guild_trials last_ferry; do
-  "$ROOT/bin/eval.sh" "$TASK" "${MODEL[@]}" "${RUN[@]}" --max-samples "$PARALLEL" --display plain
+  # A failed game is re-run (docs/protocol.md); it must not cancel the games beside it.
+  "$ROOT/bin/eval.sh" "$TASK" "${MODEL[@]}" "${RUN[@]}" --max-samples "$PARALLEL" --display plain --no-fail-on-error
 done
 echo "finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG_DIR/run.txt"
 
