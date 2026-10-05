@@ -1,0 +1,22 @@
+# .NET build output, inside the projects. Not the top-level bin/, which holds scripts.
+src/**/bin/
+src/**/obj/
+tests/**/bin/
+tests/**/obj/
+*.user
+.vs/
+.vscode/
+.idea/
+*.db
+*.db-wal
+*.db-shm
+data/
+.claude/
+build/
+logs/
+worlds/generated/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+*.egg-info/
