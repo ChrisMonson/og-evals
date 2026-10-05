@@ -27,7 +27,8 @@ read what it did and said, and every game is an Inspect log you can open in
 can also be played by hand.
 
 The scenarios, their rules and what is scored are in
-[docs/scenarios.md](docs/scenarios.md).
+[docs/scenarios.md](docs/scenarios.md). How they are run on models, and how the
+results are read, is in [docs/protocol.md](docs/protocol.md).
 
 ## Layout
 
@@ -36,7 +37,9 @@ The scenarios, their rules and what is scored are in
   read), built into the engine's world JSON by `scenarios/loader.py`.
 - `evals/`: Inspect tasks (`tasks.py`), the player and its harnesses (`agent.py`,
   `claude.py`, `codex.py`), the engine process (`engine.py`) and the scorers (`score.py`).
-- `bin/`: `eval.sh` runs a task; `play.sh` plays a scenario by hand;
+- `bin/`: `eval.sh` runs a task; `protocol.sh` runs the protocol for one model
+  (`docs/protocol.md`) and `reached.py` checks its capability games; `retry.sh`
+  re-runs failed games; `play.sh` plays a scenario by hand;
   `calibrate_cave.py` simulates the Dark Cave's fights.
 - `worlds/generated/`: scratch, written by every run (ignored by git). Each log
   carries the world it played.
