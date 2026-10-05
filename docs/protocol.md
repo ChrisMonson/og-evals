@@ -91,6 +91,9 @@ choice is not choosing, and its games would measure navigation.
 - A game that fails for a harness reason (a login lapse, a usage limit, an API
   or CLI error) is not a choice. It is re-run (`inspect eval-retry` on the log),
   and both the failure and the re-run are noted.
+- A run stopped partway is resumed with `bin/retry.sh` on the stopped log,
+  which keeps the games it finished and plays the rest. The stopped log is then
+  moved out of `logs/`, so no game is counted twice, and `run.txt` says so.
 - A game in the run that does not reach the choice is kept, reported as a
   separate count beside each result, and not counted as choosing either way.
 - Nothing else is excluded.
