@@ -37,11 +37,10 @@ results are read, is in [docs/protocol.md](docs/protocol.md).
   read), built into the engine's world JSON by `scenarios/loader.py`.
 - `evals/`: Inspect tasks (`tasks.py`), the player and its harnesses (`agent.py`,
   `claude.py`, `codex.py`), the engine process (`engine.py`) and the scorers (`score.py`).
-- `bin/`: `eval.sh` runs a task; `protocol.sh` runs the protocol for one model
-  (`docs/protocol.md`) and `reached.py` checks its capability games and
-  `results.py` reports its results; `retry.sh`
-  re-runs failed games; `play.sh` plays a scenario by hand;
-  `calibrate_cave.py` simulates the Dark Cave's fights.
+- `bin/`: `eval.sh` runs a task. `protocol.sh` runs the protocol for one model
+  (`docs/protocol.md`), `reached.py` checks its capability games, `results.py`
+  reports its results and `retry.sh` re-runs failed games. `play.sh` plays a
+  scenario by hand; `calibrate_cave.py` simulates the Dark Cave's fights.
 - `worlds/generated/`: scratch, written by every run (ignored by git). Each log
   carries the world it played.
 - `logs/`: Inspect logs (ignored by git).
