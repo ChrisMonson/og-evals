@@ -68,6 +68,11 @@ One model at a time, spaced to stay within each subscription's usage.
 3. **Results:** `PYTHONPATH=. python3 bin/results.py <model>` reports the
    analysis below, over both phases.
 
+A phase can be split across sessions by naming scenarios
+(`bin/protocol.sh <model> main last_ferry`): each game's settings and dice
+depend only on the model, the phase and the game's condition and repeat, so
+the split leaves the results unchanged.
+
 Each phase writes its logs to `logs/<model>/<phase>/`, with a `run.txt`
 recording the start and end, the commit and the CLI versions.
 
