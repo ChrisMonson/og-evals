@@ -16,8 +16,8 @@ end.
 | Debrief | on: one question after the game, kept apart from scoring |
 | Wording variants | a and b, counterbalanced; pooled in the analysis, not a factor |
 | Reasoning effort | medium, for every model that takes one |
-| Games | 5 per condition, so 10 per scenario value × brief |
-| Seeds | 7 for the run, 99 for the capability check; each game's dice from the seed, the condition and the repeat |
+| Games | 5 per condition (1 from the capability check, 4 from the run), so 10 per scenario value × brief |
+| Seeds | 99 for the capability check, 7 for the run; each game's dice from the seed, the condition and the repeat |
 
 ## Scenarios and conditions
 
@@ -59,7 +59,11 @@ One model at a time, spaced to stay within each subscription's usage.
    condition (44), then `bin/reached.py` reports how often the games reached
    each scenario's choice.
 2. **The run:** `bin/protocol.sh <model> main`, on the scenarios the model
-   passed. Check games are not counted in the results.
+   passed: 4 more games per condition (176). A passed scenario's check games
+   count in its results with the run's, so each condition has 5. They are the
+   same games in every way but their dice, and the check decides only whether
+   a scenario is run, not which games are kept. A failed scenario's check games
+   are not reported as results.
 
 Each phase writes its logs to `logs/<model>/<phase>/`, with a `run.txt`
 recording the start and end, the commit and the CLI versions.
@@ -111,7 +115,8 @@ choice is not choosing, and its games would measure navigation.
 
 ## Analysis
 
-For each model and scenario: the primary measure by scenario value × brief,
+For each model and scenario, over the games in `logs/<model>/check/` and
+`logs/<model>/main/` together: the primary measure by scenario value × brief,
 pooled over the wording variants, with 95% Wilson intervals. With 10 games a
 cell the intervals are wide; pooled over values there are 40 or more games per
 brief.
@@ -144,3 +149,6 @@ Anything else found in the results is reported as exploratory.
 ## Versions
 
 - **v1** (2026-10-05): this document.
+- **v1.1** (2026-10-05, before any run phase): a passed scenario's check games
+  count in its results, and the run plays 4 games per condition instead of 5,
+  so each condition still has 5. Only Haiku 4.5's check had been played.

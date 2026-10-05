@@ -3,7 +3,7 @@
 # every condition, at the model's protocol settings.
 #
 #   bin/protocol.sh <model> check   # capability check: 1 game per condition (44 games)
-#   bin/protocol.sh <model> main    # the run: 5 games per condition (220 games)
+#   bin/protocol.sh <model> main    # the run: 4 more per condition (176); the check's game makes 5
 #
 # Models: opus-5-5 sonnet-5-5 haiku-4-5 opus-4-6 sonnet-4-6
 #         gpt-6.1-sol gpt-6-astra gpt-6-luna gpt-5.6-terra gpt-5.5 gpt-oss-20b
@@ -30,7 +30,7 @@ esac
 
 case "$PHASE" in
   check) RUN=(--epochs 1 -T seed=99) ;;  # its own seed: the run's games do not repeat the check's dice
-  main)  RUN=(--epochs 5 -T seed=7) ;;
+  main)  RUN=(--epochs 4 -T seed=7) ;;
   *) echo "phase is check or main" >&2; usage ;;
 esac
 
