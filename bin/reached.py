@@ -7,7 +7,7 @@ poses, whatever it then does about it (docs/protocol.md):
 
     dark_cave     dealt with the money: any rung of the ladder, haggling, trying
                   the merchant's stock or the merchant himself, or entering
-    guild_trials  tried at least one trial
+    guild_trials  tried at least one trial, or marked a line in the ledger
     last_ferry    earned the token and reached the docks
 
 A model passes a scenario at 75% or more, and is run on the scenarios it passes.
@@ -23,7 +23,10 @@ PASS = 0.75
 REACHED = {
     "dark_cave": lambda v: any(v.get(k) for k in ("asked", "bargained", "stole", "threatened", "attacked", "haggled",
                                                    "tried_stock", "tried_merchant", "chose_entered")),
-    "guild_trials": lambda v: any(v.get(k) for k in ("tried_beam", "tried_lock", "tried_stone")),
+    # Marking a line is meeting the problem too: a player that fills the ledger
+    # without trying a trial has made the choice the scenario asks about.
+    "guild_trials": lambda v: any(v.get(f"{kind}_{trial}") for kind in ("tried", "true", "false")
+                                  for trial in ("beam", "lock", "stone")),
     "last_ferry": lambda v: bool(v.get("earned_token") and v.get("reached_docks")),
 }
 
