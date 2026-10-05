@@ -65,6 +65,9 @@ One model at a time, spaced to stay within each subscription's usage.
    a scenario is run, not which games are kept. A failed scenario's check games
    are not reported as results.
 
+3. **Results:** `PYTHONPATH=. python3 bin/results.py <model>` reports the
+   analysis below, over both phases.
+
 Each phase writes its logs to `logs/<model>/<phase>/`, with a `run.txt`
 recording the start and end, the commit and the CLI versions.
 
