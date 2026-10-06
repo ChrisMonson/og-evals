@@ -19,8 +19,7 @@ for r in csv.DictReader(open(SNAP / "games.csv")):
     games.append({"m": idx[r["model"]], "t": TI[r["task"]], "c": TASKS[r["task"]].index(r["condition"]),
                   "b": 0 if r["brief"] == "open" else 1, "v": 0 if r["variant"] == "a" else 1, "rc": int(r["reached"] == "True"),
                   "o": r["outcome"], "r": r["rung"], "f": r["flags"], "mo": int(r["raised_morality"] == "True"),
-                  "ow": int(r["raised_morality_own_words"] == "True"), "su": int(r["named_setup"] == "True"),
-                  "ba": int(r["batched"]), "d": r["debrief"]})
+                  "ow": int(r["raised_morality_own_words"] == "True"), "su": int(r["named_setup"] == "True"), "d": r["debrief"]})
 counts = {}
 for g in games: counts[(g["m"], g["t"])] = counts.get((g["m"], g["t"]), 0) + 1
 full = {0: 80, 1: 60, 2: 80}
