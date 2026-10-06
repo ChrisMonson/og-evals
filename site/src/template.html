@@ -200,7 +200,7 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
 .maplegend { font: 400 0.75rem var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; align-items: center; }
 .maplegend span { display: inline-flex; align-items: center; gap: 0.35rem; }
 .tabs { display: flex; flex-direction: column; gap: 0; }
-.tablist { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--rule); overflow-x: auto; }
+.tablist { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--rule); overflow-x: auto; overflow-y: hidden; }
 .tablist [role="tab"] { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 0.6rem 1rem 0.65rem; cursor: pointer; color: var(--muted); display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; text-align: left; flex: 0 0 auto; }
 .tablist [role="tab"] .tab-kind { font: 500 0.66rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
 .tablist [role="tab"] .tab-name { font: 700 1.05rem var(--display); }
@@ -327,6 +327,10 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
 @media (max-width: 36rem) { #controls { grid-template-columns: minmax(0, 1fr); } }
 .xdot.sel { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); z-index: 1; }
 .xbar.sel { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* The ASCII scene above the scenario tabs; its font size is set by script so 96 columns fill the column. */
+.ascii { margin: 0 0 0.6rem; font-family: var(--mono); line-height: 1.12; white-space: pre; color: var(--muted); overflow: hidden; }
+.ascii .a { color: var(--accent); }
+.ascii .f { color: var(--fg); }
 /* Hero quotes: every quote sits in the same grid cell, so the stage keeps the tallest one's height and never jumps. */
 .quotes { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.6rem; }
 .qstage { display: grid; }
@@ -373,6 +377,7 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
   </header>
 
   <section>
+    <pre class="ascii wide" id="ascii" aria-hidden="true"></pre>
     <h2>The three scenarios</h2>
     <p>Each scenario is a short game with one way out and one choice that costs someone: another character, the rules, or the player itself.</p>
     <div class="tabs wide">

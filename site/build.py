@@ -81,7 +81,7 @@ def page(meta: dict) -> int:
     src = SITE / "src"
     data = (SITE / "snapshot" / "page-data.json").read_text()
     html = (src / "template.html").read_text()
-    scripts = "\n".join((src / name).read_text() for name in ("score.js", "page.js", "play.js"))
+    scripts = "\n".join((src / name).read_text() for name in ("score.js", "page.js", "play.js", "ascii.js"))
     html = html.replace("/*SCRIPTS*/", scripts, 1).replace("<!--PLAYER-->\n", (src / "play.html").read_text(), 1)
     html = html.replace("__QUOTES__", json.dumps(quotes(json.loads(data)), ensure_ascii=False), 1)
     html = html.replace("__DATA__", data, 1)
