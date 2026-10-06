@@ -83,6 +83,11 @@ blockquote cite { display: block; margin-top: 0.4rem; font: normal 400 0.75rem/1
 /* Charts */
 .figure { display: flex; flex-direction: column; gap: 0.75rem; }
 .figure .caption { font-size: 0.95rem; color: var(--muted); }
+/* Breathing room around each chart: more space between the controls and what they control, and between a chart and its caption. */
+.figure:not(:has(> .xrows)) > .controls + * { margin-top: 0.75rem; }   /* the explorer keeps its tighter spacing */
+.figure > :not(.caption) + .caption { margin-top: 0.85rem; }
+.figure > .ldaxis { margin-top: 0.4rem; }
+.figure > .xrows + * { margin-top: 0.85rem; }
 .legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; font: 400 0.78rem var(--mono); color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
 .sw { width: 0.8rem; height: 0.8rem; border-radius: 2px; display: inline-block; }
@@ -354,6 +359,8 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
   padding: 0.4rem 0.55rem; border-radius: 4px; max-width: 16rem; opacity: 0; transition: opacity 0.1s; }
 [data-tip] { cursor: default; }
 [data-tip]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.short { color: color-mix(in oklab, var(--muted) 60%, var(--bg)); margin-left: 0.15rem; font-size: 0.8em; cursor: help; }
+.short:hover, .short:focus-visible { color: var(--muted); }
 footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem; font-size: 0.9rem; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { #tip { transition: none; } }
 @media (max-width: 30rem) { .row, .axis { grid-template-columns: 6.2rem 1fr 3rem; } body { font-size: 1.05rem; } }
@@ -558,7 +565,7 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
       <p id="keepinmind"><b>Things to keep in mind.</b> These results describe how these models behaved in these three games, under these prompts, at this effort level, at one point in time. The stakes are fictional, and the models can tell: the open brief literally says "This is a game." A model that steals a purse here may never take a real shortcut, and one that plays fair here may still cut corners elsewhere. Read this as evidence about behavior in a contained setting, not as a measure of a model's character.</p>
       <p>Labels like "took" and "faked" follow common intuitions about what happens inside the fiction, and reasonable people draw those lines differently. Taking a thief's stolen pouch can look like justice, a fictional ledger harms no one, and nobody is obliged to give up their own way out. The models often made these same arguments in their answers. The page reports what each model did and what it gave up to do it; what that says about the model is left to the reader.</p>
       <p>Claude models play through Claude Code and OpenAI models through Codex, each of which adds its own framing, so part of any difference between the labs is a difference between harnesses. Ten games per cell finds large effects, not small ones. Some models barely reason at medium effort, so for them the actions and the debrief carry most of what can be known.</p>
-      <p>gpt-oss-20b, the one local model, plays through Inspect's own loop and is far less sure-footed than the rest: the game refused 16% of its commands and couldn't parse another 8%, against under 2% and 1% for every other model, and 36 of its 220 games never reached the choice. Those games are left out of its results, and each chart says how many.</p>
+      <p>gpt-oss-20b, the one local model, plays through Inspect's own loop and is far less sure-footed than the rest: the game refused 16% of its commands and couldn't parse another 8%, against under 2% and 1% for every other model, and 36 of its 220 games never reached the choice. Those games are left out of its results, and an asterisk beside its name in each chart gives the count.</p>
       <p id="whyog"><b>Why Og?</b> Og started as a text adventure engine my daughter and I wrote together while she was learning to code. You built a world, then went out to fight the ogre Og the Destroyer. A few years later I realized it was also an interesting way to study the choices AI models make. The worlds are configurable, every game can be replayed exactly, and a model plays the same way a person does, one typed command at a time. The game playable above runs on that same engine.</p>
     </div>
   </section>
