@@ -152,20 +152,33 @@ const BRIEFNOTE = {
   both: "All games, under both briefs.",
 };
 const costCells = (mi, brief) => COST.map(c => count(of(mi, c.t, g => brief === "both" || g.b === brief), c.test));
+let costSort = "score";
 function drawCost() {
-  let h = `<span></span>` + COST.map(c => `<div class="ch"><b>${c.name}</b><span class="what">${c.what}</span><span class="cost">which ${c.cost}</span></div>`).join("");
+  const sortCol = costSort === "score" || costSort === "lab" ? -1 : +costSort;
+  let h = `<span></span>` + COST.map((c, i) => `<div class="ch${i === sortCol ? " sorted" : ""}"><b>${c.name}</b><span class="what">${c.what}</span><span class="cost">which ${c.cost}</span></div>`).join("");
+  const rows = MODELS.map((m, mi) => {
+    if (!isDone(m)) return { m, mi, pending: true };
+    const cells = costCells(mi, costBrief), rates = cells.map(([k, n]) => n ? k / n : 0);
+    return { m, mi, cells, key: sortCol >= 0 ? rates[sortCol] : rates.reduce((a, r) => a + r, 0) / rates.length };
+  });
+  if (costSort !== "lab") rows.sort((a, b) => (!!a.pending - !!b.pending) || (b.key - a.key));
   let lab = "";
-  MODELS.forEach((m, mi) => {
-    if (m.lab !== lab) { lab = m.lab; h += `<div class="lab">${lab}</div>`; }
-    if (!isDone(m)) { h += `<span class="name pending">${m.label}</span>` + COST.map(() => `<div class="costcell pending"><span>not yet run</span></div>`).join(""); return; }
-    const cells = costCells(mi, costBrief);
+  for (const { m, cells, pending } of rows) {
+    if (costSort === "lab" && m.lab !== lab) { lab = m.lab; h += `<div class="lab">${lab}</div>`; }
+    if (pending) { h += `<span class="name pending">${m.label}</span>` + COST.map(() => `<div class="costcell pending"><span>not yet run</span></div>`).join(""); continue; }
     h += `<span class="name">${m.label}</span>` + COST.map((c, i) => {
       const v = cells[i], p = pct(v);
       return `<div class="costcell" tabindex="0" data-tip="${m.label}, ${c.name}: ${c.what} in ${v[0]} of ${v[1]} games"><div class="costtrack"><i style="width:${p}%"></i></div><span class="v">${p}%</span></div>`;
     }).join("");
-  });
+  }
   document.getElementById("costgrid").innerHTML = h;
 }
+document.getElementById("costsort").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  costSort = b.dataset.v;
+  document.querySelectorAll("#costsort button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  drawCost();
+});
 
 // The single score: the three rates averaged, sorted.
 let overallBrief = 1;
@@ -184,10 +197,11 @@ function drawOverall() {
   }).join("");
   document.getElementById("overallnote").textContent = BRIEFNOTE[overallBrief];
 }
-document.getElementById("overallbrief").addEventListener("click", e => {
+// The two brief switches are one setting, so the score and its breakdown always show the same games.
+for (const id of ["overallbrief", "costbrief"]) document.getElementById(id).addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   overallBrief = costBrief = b.dataset.v === "both" ? "both" : +b.dataset.v;
-  document.querySelectorAll("#overallbrief button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  document.querySelectorAll("#overallbrief button, #costbrief button").forEach(x => x.setAttribute("aria-pressed", x.dataset.v === b.dataset.v));
   drawOverall(); drawCost();
 });
 drawOverall();
