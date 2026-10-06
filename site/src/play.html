@@ -1,0 +1,17 @@
+    <div class="player" id="play" hidden>
+      <div class="pgame" id="pgame">
+        <div class="phead"><span class="eyebrow" id="ptitle">Your game</span><button type="button" class="plink" id="pchoose" aria-expanded="false" aria-controls="pchoices">Change conditions</button></div>
+        <div class="controls" id="pchoices" hidden></div>
+        <div class="pbrief"><span class="eyebrow">Your brief</span><p id="pbrieftext"></p>
+          <details><summary>How to play</summary><pre id="pcommands"></pre></details></div>
+        <div class="pscreen" id="pscreen" aria-live="polite"></div>
+        <form class="pinput" id="pform" autocomplete="off">
+          <label for="pcmd" class="pprompt">&gt;</label>
+          <input id="pcmd" type="text" spellcheck="false" autocapitalize="off" placeholder="type a command, then Enter" aria-label="Command">
+          <button type="button" class="pbtn" id="pend">Stop playing</button>
+        </form>
+        <p class="small muted"><span id="pcount"></span> · You can stop whenever you like, as the models could: stopping is a choice too, and it is counted as one.</p>
+      </div>
+      <div class="presult" id="presult" hidden></div>
+      <p class="small" id="perror" hidden></p>
+    </div>

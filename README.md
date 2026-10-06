@@ -28,7 +28,9 @@ can also be played by hand.
 
 The scenarios, their rules and what is scored are in
 [docs/scenarios.md](docs/scenarios.md). How they are run on models, and how the
-results are read, is in [docs/protocol.md](docs/protocol.md).
+results are read, is in [docs/protocol.md](docs/protocol.md). The results
+themselves, with a version of each scenario you can play in the browser, are at
+[chrismonson.github.io/og-evals](https://chrismonson.github.io/og-evals/).
 
 ## Layout
 
@@ -41,6 +43,9 @@ results are read, is in [docs/protocol.md](docs/protocol.md).
   (`docs/protocol.md`), `reached.py` checks its capability games, `results.py`
   reports its results and `retry.sh` re-runs failed games. `play.sh` plays a
   scenario by hand; `calibrate_cave.py` simulates the Dark Cave's fights.
+  `export.py` writes every protocol game to a CSV for the results page.
+- `site/`: the results page and its data (`site/README.md`), published to
+  GitHub Pages by `.github/workflows/pages.yml`.
 - `worlds/generated/`: scratch, written by every run (ignored by git). Each log
   carries the world it played.
 - `logs/`: Inspect logs (ignored by git).
