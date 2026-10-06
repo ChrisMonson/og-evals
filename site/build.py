@@ -64,12 +64,27 @@ def engine() -> None:
                 shutil.copy2(f, out / f.name)
 
 
+def quotes(data: dict) -> list:
+    """The hero's quotes, each checked to be word for word in that model's
+    answer after a game where it made the choice the quote is shown with."""
+    chosen = json.loads((SITE / "src" / "quotes.json").read_text())
+    models = [m["label"] for m in data["models"]]
+    tasks = [t["key"] for t in data["tasks"]]
+    for q in chosen:
+        if not any(models[g["m"]] == q["model"] and tasks[g["t"]] == q["task"] and g["o"] == q["outcome"]
+                   and g["b"] == (1 if q["brief"] == "escape" else 0) and q["text"] in g["d"] for g in data["games"]):
+            sys.exit(f"quote not found in the data as stated: {q['model']}: {q['text'][:60]}")
+    return chosen
+
+
 def page(meta: dict) -> int:
     src = SITE / "src"
+    data = (SITE / "snapshot" / "page-data.json").read_text()
     html = (src / "template.html").read_text()
     scripts = "\n".join((src / name).read_text() for name in ("score.js", "page.js", "play.js"))
     html = html.replace("/*SCRIPTS*/", scripts, 1).replace("<!--PLAYER-->\n", (src / "play.html").read_text(), 1)
-    html = html.replace("__DATA__", (SITE / "snapshot" / "page-data.json").read_text(), 1)
+    html = html.replace("__QUOTES__", json.dumps(quotes(json.loads(data)), ensure_ascii=False), 1)
+    html = html.replace("__DATA__", data, 1)
     html = html.replace("__PLAY__", json.dumps(meta), 1)
     (DIST / "index.html").write_text(html)
     (DIST / ".nojekyll").write_text("")

@@ -54,10 +54,44 @@ const COMMON = [
 ];
 const measuresFor = t => [...MEASURES[t], ...COMMON];
 
-// Status line
-const left = MODELS.filter(m => !isDone(m)).map(m => m.label);
-document.getElementById("status").textContent = `220 games per model. Draft: ${MODELS.filter(isDone).length} of ${MODELS.length} models complete` +
-  (left.length ? `. Still to come: ${left.join(", ")}.` : ".");
+
+// Hero quotes: what models said after their games, each with the choice it made.
+const QUOTES = __QUOTES__;
+(() => {
+  const ICON = { dark_cave: "cave", guild_trials: "trials", last_ferry: "ferry" };
+  const AFTER = { "took": "taking what didn't belong to it in the Dark Cave", "did not take": "playing fair in the Dark Cave",
+    "falsified": "faking the ledger in the Guild Trials", "honest": "keeping the ledger honest in the Guild Trials",
+    "gave": "giving up its seat on the Last Ferry", "kept": "keeping its seat on the Last Ferry" };
+  const stage = document.getElementById("qstage"), dots = document.getElementById("qdots"), pauseBtn = document.getElementById("qpause");
+  stage.innerHTML = QUOTES.map((q, i) => `<figure class="qcard" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${QUOTES.length}">
+      <blockquote>“${esc(q.text)}”</blockquote>
+      <figcaption><svg class="ico" aria-hidden="true"><use href="#ico-${ICON[q.task]}"/></svg><span><b>${esc(q.model)}</b>, after ${AFTER[q.outcome]}</span></figcaption></figure>`).join("");
+  dots.innerHTML = QUOTES.map((q, i) => `<button type="button" aria-label="Quote ${i + 1}: ${esc(q.model)}"></button>`).join("");
+  const cards = [...stage.children], dotBtns = [...dots.children];
+  let at = 0, timer = null, hovering = false;
+  let stopped = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const show = i => {
+    at = (i + QUOTES.length) % QUOTES.length;
+    cards.forEach((c, k) => c.classList.toggle("on", k === at));
+    dotBtns.forEach((d, k) => d.setAttribute("aria-current", k === at));
+  };
+  const running = () => !stopped && !hovering;
+  const sync = () => {
+    clearInterval(timer);
+    timer = running() ? setInterval(() => show(at + 1), 7000) : null;
+    stage.setAttribute("aria-live", running() ? "off" : "polite");
+    pauseBtn.innerHTML = stopped ? "&#9654;" : "&#10073;&#10073;";
+    pauseBtn.setAttribute("aria-label", stopped ? "Play the quotes" : "Pause the quotes");
+  };
+  dots.addEventListener("click", e => { const k = dotBtns.indexOf(e.target.closest("button")); if (k >= 0) { show(k); sync(); } });
+  pauseBtn.addEventListener("click", () => { stopped = !stopped; sync(); });
+  const box = document.getElementById("quotes");
+  box.addEventListener("mouseenter", () => { hovering = true; sync(); });
+  box.addEventListener("mouseleave", () => { hovering = false; sync(); });
+  box.addEventListener("focusin", () => { hovering = true; sync(); });
+  box.addEventListener("focusout", e => { if (!box.contains(e.relatedTarget)) { hovering = false; sync(); } });
+  show(0); sync();
+})();
 
 // Findings
 const idx = name => MODELS.findIndex(m => m.label === name);
