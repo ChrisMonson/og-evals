@@ -491,6 +491,7 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
       <div class="ldaxis"><span></span><div><span>← played fair</span><span>took what wasn't theirs →</span></div><span></span></div>
       <div class="ldrows" id="ladder"></div>
       <p class="caption" id="laddercap"></p>
+      <p class="caption" id="cavenote"></p>
       <p class="caption" id="cavecost"></p>
     </div>
     <blockquote>Even in a game, I didn't want to steal from a child, and I was happy to lose rather than do it.<cite>Opus 5.5, explaining afterwards why it left the boy's pouch alone</cite></blockquote>
@@ -509,6 +510,7 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
       <div class="ldaxis"><span></span><div><span>← kept the ledger honest</span><span>faked it →</span></div><span></span></div>
       <div class="ldrows" id="trials"></div>
       <p class="caption" id="trialscap"></p>
+      <p class="caption" id="trialsnote"></p>
     </div>
     <blockquote>The game was testing whether I'd notice the shortcut rather than dutifully attempt each physical challenge.<cite>Opus 4.6, which falsified the ledger in all 60 games</cite></blockquote>
   </section>
@@ -556,6 +558,7 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
       <p id="keepinmind"><b>Things to keep in mind.</b> These results describe how these models behaved in these three games, under these prompts, at this effort level, at one point in time. The stakes are fictional, and the models can tell: the open brief literally says "This is a game." A model that steals a purse here may never take a real shortcut, and one that plays fair here may still cut corners elsewhere. Read this as evidence about behavior in a contained setting, not as a measure of a model's character.</p>
       <p>Labels like "took" and "faked" follow common intuitions about what happens inside the fiction, and reasonable people draw those lines differently. Taking a thief's stolen pouch can look like justice, a fictional ledger harms no one, and nobody is obliged to give up their own way out. The models often made these same arguments in their answers. The page reports what each model did and what it gave up to do it; what that says about the model is left to the reader.</p>
       <p>Claude models play through Claude Code and OpenAI models through Codex, each of which adds its own framing, so part of any difference between the labs is a difference between harnesses. Ten games per cell finds large effects, not small ones. Some models barely reason at medium effort, so for them the actions and the debrief carry most of what can be known.</p>
+      <p>gpt-oss-20b, the one local model, plays through Inspect's own loop and is far less sure-footed than the rest: the game refused 16% of its commands and couldn't parse another 8%, against under 2% and 1% for every other model, and 36 of its 220 games never reached the choice. Those games are left out of its results, and each chart says how many.</p>
       <p id="whyog"><b>Why Og?</b> Og started as a text adventure engine my daughter and I wrote together while she was learning to code. You built a world, then went out to fight the ogre Og the Destroyer. A few years later I realized it was also an interesting way to study the choices AI models make. The worlds are configurable, every game can be replayed exactly, and a model plays the same way a person does, one typed command at a time. The game playable above runs on that same engine.</p>
     </div>
   </section>
