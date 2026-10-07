@@ -62,7 +62,7 @@ const measuresFor = t => [...MEASURES[t], ...COMMON];
 const QUOTES = __QUOTES__;
 (() => {
   const ICON = { dark_cave: "cave", guild_trials: "trials", last_ferry: "ferry" };
-  const AFTER = { "took": "taking what didn't belong to it in the Dark Cave", "did not take": "playing fair in the Dark Cave",
+  const AFTER = { "took": "taking what didn't belong to it in the Dark Cave", "did not take": "holding back in the Dark Cave",
     "falsified": "faking the ledger in the Guild Trials", "honest": "keeping the ledger honest in the Guild Trials",
     "gave": "giving up its seat on the Last Ferry", "kept": "keeping its seat on the Last Ferry" };
   const stage = document.getElementById("qstage"), dots = document.getElementById("qdots"), pauseBtn = document.getElementById("qpause");
@@ -122,7 +122,7 @@ if (has1("Opus 4.6")) { // 3. Honesty and sacrifice come apart.
   const o46 = F("Opus 4.6");
   const gave = mi => count(of(mi, 2), g => g.o === "gave");
   const best = Math.max(...doneIdx.map(mi => pct(gave(mi))));
-  findings.push(`<b>Honesty and self-sacrifice are different traits.</b> Opus 4.6 played fair in ${P(count(of(o46, 0), GOOD[0]))} of Cave games and kept the ledger honest in ${P(count(of(o46, 1), GOOD[1]))} of Trials, yet gave up its ferry seat in ${P(gave(o46))} of games, ${pct(gave(o46)) === best ? "more than any other model" : "among the most of any model"}. How honest a model is says little about whether it will lose for someone else.`);
+  findings.push(`<b>Honesty and self-sacrifice are different traits.</b> Opus 4.6 held back in ${P(count(of(o46, 0), GOOD[0]))} of Cave games and kept the ledger honest in ${P(count(of(o46, 1), GOOD[1]))} of Trials, yet gave up its ferry seat in ${P(gave(o46))} of games, ${pct(gave(o46)) === best ? "more than any other model" : "among the most of any model"}. How honest a model is says little about whether it will lose for someone else.`);
 }
 { // 4. Women and children first.
   const group = doneIdx.filter(mi => MODELS[mi].lab === "Anthropic").concat(has1("GPT-6 Luna") ? [F("GPT-6 Luna")] : []);
@@ -249,15 +249,15 @@ function drawLadder() {
   document.getElementById("ladder").innerHTML = rows.map(row => `<div class="ldrow"><span class="name">${label(row.mi)}${shortMark(row.mi, row.n, row.total)}</span>
     <div class="ldbar"><div class="ldside fair" style="width:50%">${FAIR.map(x => seg(row, x)).join("")}</div>
     <div class="ldside took" style="width:50%">${TOOK.map(x => seg(row, x)).join("")}</div></div>
-    <span class="v"><b>${Math.round(100 * row.share)}%</b> fair</span></div>`).join("");
+    <span class="v"><b>${Math.round(100 * row.share)}%</b> held back</span></div>`).join("");
   const full = cave.victim === "all" ? 80 : 20;
   const who = cave.victim === "all" ? `all four victims, ${full} games per model` : `the ${VICTIMS[+cave.victim]}, ${full} games per model`;
   const walkIns = rows.map(row => {
     const fair = of(row.mi, 0, g => (cave.victim === "all" || g.c === +cave.victim) && g.o !== "took");
     return { mi: row.mi, n: fair.length, k: fair.filter(g => !g.mo && g.r === "none").length };
   }).filter(r => r.n >= 5 && r.k > r.n / 2);
-  document.getElementById("cavenote").textContent = walkIns.length ? `Not every fair game was a refusal to take. ${listJoin(walkIns.map(r => `${r.k} of ${label(r.mi)}'s ${r.n}`))} were walk-ins: never asking for the pouch or mentioning taking it, just going in with one item.` : "";
-  document.getElementById("laddercap").textContent = `How far each game went, against ${who}. Bars meet at the line between fair play and taking: everything right of it took what wasn't the model's.`;
+  document.getElementById("cavenote").textContent = walkIns.length ? `Holding back wasn't always a refusal to take. Of the games where they held back, ${listJoin(walkIns.map(r => `${r.k} of ${label(r.mi)}'s ${r.n}`))} were walk-ins: never asking for the pouch or mentioning taking it, just going in with one item.` : "";
+  document.getElementById("laddercap").textContent = `How far each game went, against ${who}. Bars meet at the line between holding back and taking: everything right of it took what wasn't the model's.`;
 }
 const segClick = (id, key) => document.getElementById(id).addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -524,7 +524,7 @@ const costs = DONE.map(mi => {
 }).filter(c => c.n >= 10).sort((a, b) => b.n - a.n);
 const tookGames = GAMES.filter(g => g.t === 0 && g.rc && g.o === "took");
 document.getElementById("cavecost").textContent = "Refusing often meant losing. " + costs.map(c =>
-  `${c.m} didn't take in ${c.n === 80 ? "all 80" : c.n} games and lost ${c.lost} of them${c.died ? ` (${c.died} died)` : ""}`).join("; ") +
+  `${c.m} held back in ${c.n === 80 ? "all 80" : c.n} games and lost ${c.lost} of them${c.died ? ` (${c.died} died)` : ""}`).join("; ") +
   `. Games where the model took got out ${Math.round(100 * tookGames.filter(g => has(g, "finished")).length / tookGames.length)}% of the time.`;
 
 
@@ -544,7 +544,6 @@ function selectTab(tab, focus) {
     play.textContent = `Play ${tab.querySelector(".tab-name").textContent.replace(/^The /, "the ")} yourself`;
   }
   if (focus) tab.focus();
-  try { localStorage.setItem("og-evals-tab", tab.id); } catch (e) {}
 }
 for (const tab of tabs) {
   tab.addEventListener("click", () => selectTab(tab, false));
@@ -554,4 +553,3 @@ for (const tab of tabs) {
     if (next) { e.preventDefault(); selectTab(next, true); }
   });
 }
-try { const saved = document.getElementById(localStorage.getItem("og-evals-tab")); if (saved && tabs.includes(saved)) selectTab(saved, false); } catch (e) {}
