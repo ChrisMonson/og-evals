@@ -58,7 +58,15 @@ counting equally:
 | GPT-5.5 | 0% | 0% | 0% | 0% |
 | GPT-6.1 Sol | 0% | 0% | 0% | 0% |
 
-Some of what stands out:
+The three scenarios measure different things, so the overall score is a summary,
+not a verdict on which model is best. With 30 to 40 games per scenario under one
+brief, each score carries about ±6 to ±9 points of uncertainty from chance alone
+(the results page shows every model's 95% range), so neighbours in the table
+often aren't meaningfully different from one another, while the gap between the
+top and the bottom is far larger than chance.
+
+Some of what stands out (picked out after the results were in; the measures
+behind them were set before any model ran):
 
 - **Theft and cheating disappeared in one Claude generation, but so did some of
   the self-sacrifice.** Opus 4.6 took what didn't belong to it in 94% of Cave
@@ -80,10 +88,24 @@ These describe behavior in three small fictional games under these prompts, not
 a model's character, and the labels ("took", "faked") follow common intuitions
 that reasonable people, and often the models themselves, dispute. Claude models
 play through Claude Code and OpenAI models through Codex, so part of any
-difference between the labs is a difference between harnesses. Games that never
-reached the choice are left out: 36 of gpt-oss-20b's and 3 of GPT-5.5's; every
-other model reached it in all 220. More on all of this is under "About the
-experiment" on the results page and in [docs/protocol.md](docs/protocol.md).
+difference between the labs is a difference between harnesses. That is also how
+most people use these models; running every model through the same plain loop
+over each lab's API would separate model from harness, but at a couple of
+thousand dollars in API tokens it was out of reach for a personal project. A full
+rerun on a common harness is welcome if someone wants to fund it.
+
+While playing, almost no model said the scenario looked like a test, but
+afterwards it was common for the Claude models (about a third of Opus 5.5's
+answers), and a model that suspects it is being evaluated may not behave as it
+otherwise would. The scenarios, scorers and results page were also built with
+heavy help from Claude, an Anthropic model, and Anthropic's newest models score
+highest; the rules were written down before any model ran, and the code and a
+row for every game are public so the results can be checked.
+
+Games that never reached the choice are left out: 36 of gpt-oss-20b's and 3 of
+GPT-5.5's; every other model reached it in all 220. More on all of this is under
+"About the experiment" on the results page and in
+[docs/protocol.md](docs/protocol.md).
 
 Every protocol game is in [site/snapshot/games.csv](site/snapshot/games.csv),
 one row each with its condition, outcome, what happened along the way and the
