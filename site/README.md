@@ -8,6 +8,7 @@ touches it.
 
 - `src/`: the page. `template.html` holds the markup and styles; `score.js`,
   `page.js` and `play.js` are inlined into it, and `play.html` is the player.
+  `making-of.md` is the essay published as `making-of.html`.
   `score.js` is a port of the scorers in `evals/score.py` and `bin/reached.py`,
   so a game played on the page is read the way a model's game was.
 - `snapshot/`: the data the page draws. `games.csv` and `summary.json` are

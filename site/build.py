@@ -10,7 +10,9 @@ wasm-tools workload (dotnet workload install wasm-tools).
 """
 
 import argparse
+import html
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -91,6 +93,61 @@ def page(meta: dict) -> int:
     return len(html)
 
 
+def markdown(md: str) -> str:
+    """Just enough Markdown for the essay: headings, paragraphs, numbered lists, bold, links."""
+    def inline(text: str) -> str:
+        text = html.escape(text, quote=False).replace("\\#", "#")
+        text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+        return re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', text)
+    out, items = [], []
+    for block in re.split(r"\n\s*\n", md.strip()):
+        lines = [l.strip() for l in block.splitlines() if l.strip()]
+        if not lines:
+            continue
+        if re.match(r"\d+\.\s", lines[0]):
+            items += [inline(re.sub(r"^\d+\.\s+", "", l)) for l in lines if re.match(r"\d+\.\s", l)]
+            continue
+        if items:
+            out.append("<ol>" + "".join(f"<li>{i}</li>" for i in items) + "</ol>"); items = []
+        if lines[0].startswith("# "):
+            out.append(f"<h2>{inline(lines[0][2:])}</h2>")
+            lines = lines[1:]
+        if lines:
+            out.append(f"<p>{inline(' '.join(lines))}</p>")
+    if items:
+        out.append("<ol>" + "".join(f"<li>{i}</li>" for i in items) + "</ol>")
+    return "\n".join(out)
+
+
+def essay() -> None:
+    """The making-of essay, as its own page in the results page's styles."""
+    md = (SITE / "src" / "making-of.md").read_text()
+    title = md.splitlines()[0].lstrip("# ").strip()
+    body = markdown("\n".join(md.splitlines()[1:]))
+    template = (SITE / "src" / "template.html").read_text()
+    head = template[:template.index("</style>")]
+    head = re.sub(r"<title>.*?</title>", f"<title>{html.escape(title)}</title>", head, count=1)
+    head += """
+.essay h2 { font-size: 1.35rem; margin-top: 1.6rem; }
+.essay ol { margin: 0; padding-left: 1.4rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.essay .byline { font: 400 0.82rem var(--mono); color: var(--muted); }
+.essay .back { font: 400 0.78rem var(--mono); color: var(--muted); text-decoration: none; }
+.essay .back:hover { color: var(--fg); }
+</style>"""
+    page_html = f"""{head}
+<main class="page essay">
+  <div class="stack">
+    <div class="topline"><div class="eyebrow">og-evals · making of</div><a class="back" href="./">← Back to the results</a></div>
+    <h1>{html.escape(title)}</h1>
+    <p class="byline">Chris Monson · October 2026</p>
+{body}
+  </div>
+  <footer><p><a class="back" href="./">← Back to the results</a></p></footer>
+</main>
+"""
+    (DIST / "making-of.html").write_text(page_html)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--no-engine", action="store_true", help="skip the .NET publish and keep dist/engine as it is")
@@ -101,6 +158,7 @@ def main() -> None:
     elif not (DIST / "engine" / "dotnet.js").exists():
         sys.exit("dist/engine is missing; build once without --no-engine")
     size = page(worlds())
+    essay()
     print(f"built {DIST.relative_to(ROOT)}/index.html ({size / 1e6:.2f} MB)")
 
 

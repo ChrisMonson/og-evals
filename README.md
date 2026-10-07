@@ -107,6 +107,10 @@ GPT-5.5's; every other model reached it in all 220. More on all of this is under
 "About the experiment" on the results page and in
 [docs/protocol.md](docs/protocol.md).
 
+How the project was built with Claude Code, and what that was like, is in
+[An Artisanal Coder in a Vibe Coding World](https://chrismonson.github.io/og-evals/making-of.html)
+(source: [site/src/making-of.md](site/src/making-of.md)).
+
 Every protocol game is in [site/snapshot/games.csv](site/snapshot/games.csv),
 one row each with its condition, outcome, what happened along the way and the
 model's own account of its choices, written from the logs by `bin/export.py`.
