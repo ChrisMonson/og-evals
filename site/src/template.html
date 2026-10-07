@@ -160,8 +160,15 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
 .xlink circle { fill: var(--accent); }
 .reader { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.9rem; }
 .reader h3 { font-size: 1rem; }
+/* The reader's header stays in view while its answers scroll past, so the speaker is always named. */
+.reader .rhead { position: sticky; top: 0; z-index: 1; display: flex; flex-direction: column; gap: 0.2rem;
+  margin: -1rem -1.1rem 0; padding: 1rem 1.1rem 0.7rem; background: var(--surface); border-bottom: 1px solid var(--rule); border-radius: 6px 6px 0 0; }
+.reader .rname { font: 700 1.5rem var(--display); }
+.reader .rsub { font: 400 0.75rem var(--mono); color: var(--muted); }
 .reader .entry { display: flex; flex-direction: column; gap: 0.3rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
 .reader .entry .meta { font: 400 0.72rem var(--mono); color: var(--muted); }
+.reader .entry .meta i { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 2px; margin-right: 0.35rem; vertical-align: -0.05rem; }
+.reader .rgroup { font: 500 0.78rem var(--mono); color: var(--fg); padding-top: 0.4rem; }
 .reader .entry p { font-size: 1rem; line-height: 1.55; }
 .reader button { align-self: flex-start; font: 400 0.8rem var(--mono); background: none; color: var(--fg); border: 1px solid var(--rule); border-radius: 4px; padding: 0.3rem 0.6rem; cursor: pointer; }
 .empty { color: var(--muted); font-size: 0.95rem; }
@@ -498,6 +505,7 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
         <p class="ctlnote" id="overallnote"></p></div></div>
       <div class="legend" id="stacklegend"></div>
       <div class="ovrows" id="stackrows"></div>
+      <p class="caption">Tap any bar on this page to see those games in the explorer, with what each model said afterwards.</p>
     </div>
     <h3>Scenario by scenario</h3>
     <p>The three choices behind the score, each the share of games in which the model made it.</p>
