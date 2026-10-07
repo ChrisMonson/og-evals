@@ -388,7 +388,10 @@ drawFerry();
 
 // Explorer
 const SCEN = [["Dark Cave", "victim"], ["Guild Trials", "time"], ["Last Ferry", "bystander"]];
-const state = { t: 2, measure: "gave", briefs: [0, 1], conds: [0, 1, 2, 3], variants: [0, 1], split: "none", among: "reached", view: "dots", sort: "g0" };
+const state = { t: 2, measure: "gave", briefs: [0, 1], conds: [0, 1, 2, 3], variants: [0, 1], split: "none", among: "reached", view: "blocks", sort: "g0" };
+// Bars when nothing is split, a dot per group on each model's line once something is; a view the reader picks sticks.
+let viewChosen = false;
+const autoView = () => { if (!viewChosen) state.view = state.split === "none" ? "blocks" : "dots"; };
 const controls = document.getElementById("controls");
 const seg = (key, options, multi) => `<div class="seg" role="group">${options.map(([v, l]) => {
   const on = multi ? state[key].includes(v) : state[key] === v;
@@ -431,6 +434,8 @@ controls.addEventListener("click", e => {
   } else {
     state[key] = v;
     if (key === "t") { state.measure = measuresFor(v)[0][0]; state.conds = DATA.tasks[v].values.map((_, i) => i); }
+    if (key === "view") viewChosen = true;
+    if (key === "split") autoView();
   }
   render();
 });
@@ -450,7 +455,8 @@ addEventListener("resize", () => requestAnimationFrame(drawLink));
 function openInExplorer(el) {
   const [t, measure, mi, briefs, conds] = el.dataset.ex.split(";");
   const nums = x => x.split(",").map(Number);
-  Object.assign(state, { t: +t, measure, briefs: nums(briefs), conds: nums(conds), variants: [0, 1], split: "none", among: "reached", view: "dots", sort: "g0" });
+  Object.assign(state, { t: +t, measure, briefs: nums(briefs), conds: nums(conds), variants: [0, 1], split: "none", among: "reached", sort: "g0" });
+  autoView();
   moreOpen = state.briefs.length < 2 || state.conds.length < DATA.tasks[+t].values.length;
   lastClick = { m: +mi, g: 0 };
   render();
