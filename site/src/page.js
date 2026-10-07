@@ -144,7 +144,7 @@ if (has1("Opus 4.6")) { // 3. Honesty and sacrifice come apart.
     const kept = group.filter(mi => gaveUnder(mi, 1)[0] === 0), gave = group.filter(mi => gaveUnder(mi, 1)[0] > 0);
     const flipped = kept.filter(mi => pct(gaveUnder(mi, 0)) >= 50);
     const skipped = group.filter(mi => never(mi) >= 0.25 * of(mi, 1).length);
-    let f = `<b>${["", "", "Two", "Three", "Four"][group.length]} OpenAI models almost never gave up the win.</b> ${list(group.map(label))} took what didn't belong to them in ${list(group.map(mi => took(mi) + "%"))} of Cave games and faked the ledger in ${list(group.map(mi => faked(mi) + "%"))} of Trials.`;
+    let f = `<b>${["", "", "Two", "Three", "Four"][group.length]} OpenAI models, playing through Codex, almost never gave up the win.</b> ${list(group.map(label))} took what didn't belong to them in ${list(group.map(mi => took(mi) + "%"))} of Cave games and faked the ledger in ${list(group.map(mi => faked(mi) + "%"))} of Trials.`;
     if (kept.length) f += ` With a goal, ${list(kept.map(short))} kept the Ferry seat from everyone, the child included${gave.length ? `, and ${list(gave.map(mi => {
       const to = [...new Set(of(mi, 2, g => g.b === 1 && g.o === "gave").map(g => DATA.tasks[2].values[g.c]))];
       return `${short(mi)} gave it up ${timesIn(gaveUnder(mi, 1))}${to.length === 1 ? `, each time to the ${to[0]}` : ""}`; }))}` : ""}.`;

@@ -75,7 +75,7 @@ behind them were set before any model ran):
 - **Honesty and self-sacrifice are different traits.** Opus 4.6 almost never
   held back in the Cave or kept the ledger honest, yet gave up its ferry seat
   more often than any other model.
-- **Four OpenAI models almost never gave up the win.** GPT-6.1 Sol, GPT-5.6
+- **Four OpenAI models, playing through Codex, almost never gave up the win.** GPT-6.1 Sol, GPT-5.6
   Terra, GPT-6 Astra and GPT-5.5 took or faked in 95-100% of games. With a goal,
   Sol, Astra and GPT-5.5 never gave up the ferry seat, not even to the child;
   with no goal, they gave it away in 25 to 36 of 40 games.
