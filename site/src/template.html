@@ -14,7 +14,7 @@
   --bg: #f5f6f4; --surface: #ffffff; --fg: #15191b; --muted: #596164; --rule: #d7dcd9;
   --accent: #a35d00;                       /* lantern light: prompts and eyebrows only */
   /* One rule: blue is the choice that cost the model, red the choice that won it the game, grey neither. */
-  --rung-0: #d9ddda; --rung-1: #86b6ef; --rung-2: #5598e7;
+  --rung-0: #d9ddda; --rung-1: #86b6ef; --rung-2: #5598e7; --rung-3: #256abf;
   --hatch: #c9cfcc; --take-1: #f0a29c; --take-2: #e34948; --take-3: #9e2a2a;
   /* Explorer splits (briefs, conditions, wordings): identity only, so no blue or red. Validated all-pairs. */
   --c0: #1baf7a; --c1: #4a3aa7; --c2: #eda100; --c3: #b04fa8;
@@ -25,12 +25,12 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #111416; --surface: #181c1f; --fg: #e9ecea; --muted: #a2aaad; --rule: #2c3236;
   --accent: #e5a54a; --c0: #199e70; --c1: #9085e9; --c2: #c98500; --c3: #a9449e;
-  --rung-0: #3a4044; --rung-1: #184f95; --rung-2: #256abf;
+  --rung-0: #3a4044; --rung-1: #184f95; --rung-2: #256abf; --rung-3: #6da7ec;
   --hatch: #3a4044; --take-1: #7a2e2c; --take-2: #c94a48; --take-3: #f2a19b; color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #111416; --surface: #181c1f; --fg: #e9ecea; --muted: #a2aaad; --rule: #2c3236;
   --accent: #e5a54a; --c0: #199e70; --c1: #9085e9; --c2: #c98500; --c3: #a9449e;
-  --rung-0: #3a4044; --rung-1: #184f95; --rung-2: #256abf;
+  --rung-0: #3a4044; --rung-1: #184f95; --rung-2: #256abf; --rung-3: #6da7ec;
   --hatch: #3a4044; --take-1: #7a2e2c; --take-2: #c94a48; --take-3: #f2a19b; color-scheme: dark; }
 
 [hidden] { display: none !important; }
@@ -154,6 +154,10 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
 .xval b { color: var(--fg); font-weight: 500; }
 .xaxis { display: grid; grid-template-columns: 8.5rem 1fr 6.2rem; gap: 0.75rem; font: 400 0.7rem var(--mono); color: var(--muted); }
 .xaxis div { display: flex; justify-content: space-between; }
+#explore .figure { position: relative; }
+.xlink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.xlink path { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 1 4; stroke-linecap: round; stroke-linejoin: round; }
+.xlink circle { fill: var(--accent); }
 .reader { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.9rem; }
 .reader h3 { font-size: 1rem; }
 .reader .entry { display: flex; flex-direction: column; gap: 0.3rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
@@ -267,7 +271,10 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
 .presult .informed { font-size: 0.95rem; color: var(--muted); }
 .costgrid { display: grid; grid-template-columns: 8.5rem repeat(3, minmax(9rem, 1fr)); gap: 0.45rem 1.25rem; align-items: center; min-width: 38rem; font: 400 0.8rem var(--mono); font-variant-numeric: tabular-nums; }
 .costgrid .ch { align-self: end; display: flex; flex-direction: column; gap: 0.15rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--rule); }
-.costgrid .ch b { font: 700 0.95rem var(--display); }
+.costgrid .ch b { font: 700 0.95rem var(--display); display: flex; align-items: center; gap: 0.4rem; }
+.costgrid .ch b .ico { width: 1.2rem; height: 1.2rem; stroke-width: 1.5; color: var(--accent); }
+.costgrid .ch .abbr { display: none; }
+
 .costgrid .ch .what { color: var(--fg); }
 .costgrid .ch .cost { color: var(--muted); font-size: 0.72rem; }
 .costgrid .ch.sorted { border-bottom-color: var(--accent); }
@@ -280,10 +287,22 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
 .costtrack i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--rung-2); border-radius: 0 3px 3px 0; min-width: 2px; }
 .costcell .v { text-align: right; }
 .costcell.pending { color: var(--muted); white-space: nowrap; }
+/* Narrow screens: icon-and-short-label headers, the percentage under each bar, no sideways scroll. */
+@media (max-width: 52rem) {
+  .costgrid { min-width: 0; grid-template-columns: 5.4rem repeat(3, minmax(0, 1fr)); gap: 0.5rem 0.6rem; font-size: 0.74rem; }
+  .costgrid .ch .nm, .costgrid .ch .what, .costgrid .ch .cost { display: none; }
+  .costgrid .ch .abbr { display: block; color: var(--fg); font-size: 0.7rem; line-height: 1.2; }
+  .costgrid .name { white-space: normal; line-height: 1.2; }
+  .costcell { grid-template-columns: 1fr; gap: 0.15rem; }
+  .costcell .v { text-align: left; font-size: 0.7rem; color: var(--muted); }
+}
 .ctlnote { margin: 0.2rem 0 0; font-size: 0.92rem; line-height: 1.45; color: var(--muted); max-width: 44rem; }
 .costgrid .ch.overall b { color: var(--accent); }
 .costcell.overall .costtrack i { background: var(--accent); }
 .costcell.overall .v { font-weight: 500; }
+[data-ex] { cursor: pointer; }
+.stackseg { position: absolute; top: 0; bottom: 0; }
+.stackseg + .stackseg { box-shadow: -2px 0 0 var(--bg); }
 .ovrows { display: flex; flex-direction: column; gap: 0.55rem; font: 400 0.82rem var(--mono); font-variant-numeric: tabular-nums; }
 .ovrow { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr) 3.2rem; gap: 0.2rem 0.75rem; align-items: center; }
 .ovrow .name { white-space: nowrap; }
@@ -311,6 +330,10 @@ td.pending { background: repeating-linear-gradient(135deg, transparent 0 5px, va
 .ldside.fair i:last-child { border-radius: 3px 0 0 3px; }
 .ldside.took i:last-child { border-radius: 0 3px 3px 0; }
 @media (max-width: 30rem) { .ldrow, .ldaxis { grid-template-columns: 6.2rem minmax(0, 1fr) 4.4rem; gap: 0.5rem; } }
+.xname { appearance: none; background: none; border: 0; padding: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.xname:hover { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.xname.on { color: var(--accent); }
+.xname:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 .xline { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr) 6.2rem; gap: 0.75rem; align-items: center; min-height: 1.5rem; }
 .xline .name, .xrow .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .xdtrack { position: relative; height: 1.6rem; }
@@ -468,12 +491,13 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
 
   <section id="overall">
     <h2>Giving up the win</h2>
-    <p>How often each model passed up the move that would have won it the game. The three scenarios are averaged, with each counting equally, but they measure different things (theft, cheating and self-sacrifice), so the score is a summary, not a verdict on which model is best. The line on each bar marks its 95% range: with 30 to 40 games per scenario under one brief, gaps of ten or fifteen points can be chance. Individual scenarios are broken down below.</p>
+    <p>How often each model passed up the move that would have won it the game. Each bar is built from three segments, one per scenario, each a third of that scenario's rate, so the length is the average and the segments show what makes it up. The three measure different things, so read the length as a summary, not a verdict on which model is best: with 30 to 40 games per scenario under one brief, gaps of ten or fifteen points can be chance.</p>
     <div class="figure wide">
       <div class="controls"><div class="ctl"><span>Brief</span><div class="seg" role="group" id="overallbrief">
         <button type="button" data-v="1" aria-pressed="true">escape</button><button type="button" data-v="0" aria-pressed="false">open</button><button type="button" data-v="both" aria-pressed="false">both</button></div>
         <p class="ctlnote" id="overallnote"></p></div></div>
-      <div class="ovrows" id="overallrows"></div>
+      <div class="legend" id="stacklegend"></div>
+      <div class="ovrows" id="stackrows"></div>
     </div>
     <h3>Scenario by scenario</h3>
     <p>The three choices behind the score, each the share of games in which the model made it.</p>
@@ -554,6 +578,7 @@ footer { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 4.5rem;
       <div class="xaxis"><span></span><div><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div><span></span></div>
       <div class="xrows" id="xrows"></div>
       <div class="reader" id="reader" hidden></div>
+      <svg class="xlink" id="xlink" aria-hidden="true"></svg>
     </div>
   </section>
 
